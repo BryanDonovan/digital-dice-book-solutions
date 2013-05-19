@@ -1,5 +1,3 @@
-// Setup: first run "npm install async"
-
 var shuffle = function (o) {
     for (var j, x, i = o.length; i; j = parseInt(Math.random() * i, 10), x = o[--i], o[i] = o[j], o[j] = x);
     return o;
