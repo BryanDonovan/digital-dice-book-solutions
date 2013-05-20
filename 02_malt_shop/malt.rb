@@ -1,5 +1,3 @@
-require 'pp'
-
 runs = 1000000
 lil_dur = 5
 bill_dur = 7
