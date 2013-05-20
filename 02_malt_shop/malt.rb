@@ -2,7 +2,7 @@ require 'pp'
 
 runs = 1000000
 lil_dur = 5
-bill_dur = 5
+bill_dur = 7
 hits = 0
 
 runs.times do
@@ -15,10 +15,6 @@ runs.times do
   if lil_start > bill_start && lil_start < bill_end
     hits += 1
   elsif bill_start > lil_start && bill_start < lil_end
-    hits += 1
-  elsif bill_start < lil_start && bill_end > lil_end
-    hits += 1
-  elsif lil_start < bill_start && lil_end > bill_end
     hits += 1
   end
 end
