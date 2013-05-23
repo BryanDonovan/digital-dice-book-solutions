@@ -1,5 +1,5 @@
-digital-dice
-======================
+digital-dice-book-solutions
+===========================
 
 # Solutions to problems from the book Digital Dice
 
