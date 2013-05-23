@@ -1,21 +1,22 @@
-% From Digital Dice, page 7
-% Can be executed with octave.
+% Based on solution in Digital Dice introduction, page 7
+% http://press.princeton.edu/chapters/i8623.pdf
+% Can be executed with Octave.
 
-M = 24;
-totalcorrect = 0;
+runs = 24;
+total_correct = 0;
 
 for k = 1:100000
-  correct = 0;
+  loop_correct = 0;
 
-  term = randperm(M);
+  term = randperm(runs);
 
-  for j = 1:M
+  for j = 1:runs
     if term(j) == j
-      correct = correct + 1;
+      loop_correct = loop_correct + 1;
     end
   end
 
-  totalcorrect = totalcorrect + correct;
+  total_correct = total_correct + loop_correct;
 end
 
-totalcorrect / 100000
+total_correct / 100000
