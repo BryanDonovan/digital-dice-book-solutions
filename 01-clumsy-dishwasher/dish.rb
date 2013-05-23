@@ -9,7 +9,7 @@ runs.times do
   broken_count = 0
 
   5.times do
-    if dishwashers.sample(1)[0] === clumsy_guy
+    if dishwashers.sample === clumsy_guy
       broken_count += 1
     end
   end
