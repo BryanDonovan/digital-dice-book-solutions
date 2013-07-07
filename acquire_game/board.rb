@@ -32,11 +32,10 @@ module Acquire
   end
 
   class Board
-    attr_accessor :cells, :cell_indexes, :length, :width
+    attr_accessor :cells, :length, :width
 
     def initialize(args={:length => 12, :width => 9})
-      @cells = {}
-      @cell_indexes = []
+      @cells = []
       @length = args[:length]
       @width = args[:width]
       @neighboring_indexes = {}
@@ -56,7 +55,7 @@ module Acquire
     end
 
     def full?
-      @cell_indexes.each do |cell_index|
+      @cells.each_index do |cell_index|
         cell = cell_at(cell_index)
         return false if cell.empty?
       end
@@ -64,7 +63,7 @@ module Acquire
     end
 
     def remote_cells_available?
-      @cell_indexes.each do |cell_index|
+      @cells.each_index do |cell_index|
         return true if cell_index_has_no_neighbors?(cell_index)
       end
       return false
@@ -85,8 +84,6 @@ module Acquire
       0.upto(@length - 1) do |x_coord|
         0.upto(@width - 1) do |y_coord|
           @cells[cell_index] = Acquire::Cell.new(x_coord, y_coord)
-          @cell_indexes.push(cell_index)
-          get_neighboring_indexes(cell_index)
           @neighboring_indexes[cell_index] = get_neighboring_indexes(cell_index)
           cell_index += 1
         end
@@ -136,18 +133,14 @@ module Acquire
         return nil
       end
 
-      successfull_choice = false
-
-      until successfull_choice do
-        index_choice = @board.cell_indexes.sample
-        if @board.cell_empty_at?(index_choice)
-          @board.occupy_cell_at(index_choice)
-          successfull_choice = true
+      loop do
+        cell = @board.cells.sample
+        if cell.empty?
+          cell.occupy!
+          @total_picks += 1
+          return cell
         end
       end
-
-      @total_picks += 1
-      return @board.cell_at(index_choice)
     end
 
     def pick_until_no_remote_cells_left
@@ -159,7 +152,7 @@ module Acquire
 end
 
 
-runs = 1000
+runs = 100
 
 total_picks = 0;
 
