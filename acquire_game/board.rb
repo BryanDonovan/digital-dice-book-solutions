@@ -76,7 +76,6 @@ module Acquire
       @neighbors[index].each do |neighbor|
         return false if neighbor.occupied?
       end
-
       return true
     end
 
