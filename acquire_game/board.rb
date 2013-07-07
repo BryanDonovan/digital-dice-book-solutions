@@ -38,16 +38,12 @@ module Acquire
       @cells = []
       @length = args[:length]
       @width = args[:width]
-      @neighboring_indexes = {}
+      @neighbors = {}
       build_board_matrix
     end
 
     def occupy_cell_at(index)
       @cells[index].occupy!
-    end
-
-    def cell_at(index)
-      @cells[index]
     end
 
     def cell_empty_at?(index)
@@ -56,22 +52,23 @@ module Acquire
 
     def full?
       @cells.each_index do |cell_index|
-        cell = cell_at(cell_index)
+        cell = @cells[cell_index]
         return false if cell.empty?
       end
       return true
     end
 
     def remote_cells_available?
-      @cells.each_index do |cell_index|
-        return true if cell_index_has_no_neighbors?(cell_index)
+      @cells.each do |cell|
+        return true if cell_has_no_neighbors?(cell)
       end
       return false
     end
 
-    def cell_index_has_no_neighbors?(index)
-      @neighboring_indexes[index].each do |n_index|
-        return false if !cell_empty_at?(n_index)
+    def cell_has_no_neighbors?(cell)
+      index = get_index_at([cell.x_coord, cell.y_coord])
+      @neighbors[index].each do |neighbor|
+        return false if neighbor.occupied?
       end
 
       return true
@@ -84,14 +81,16 @@ module Acquire
       0.upto(@length - 1) do |x_coord|
         0.upto(@width - 1) do |y_coord|
           @cells[cell_index] = Acquire::Cell.new(x_coord, y_coord)
-          @neighboring_indexes[cell_index] = get_neighboring_indexes(cell_index)
           cell_index += 1
         end
       end
+
+      @cells.each_with_index do |cell, index|
+        @neighbors[index] = get_neighbors(cell)
+      end
     end
 
-    def get_neighboring_indexes(index)
-      cell = cell_at(index)
+    def get_neighbors(cell)
       neighbors = []
       neighbor_distances = [[0, 1], [0, -1], [1, 0], [-1, 0]]
 
@@ -100,7 +99,8 @@ module Acquire
         y = cell.y_coord + n_dists[1]
 
         if coords_within_bounds?([x, y])
-          neighbors.push(get_index_at([x, y]))
+          cell = @cells[get_index_at([x, y])]
+          neighbors.push(cell)
         end
       end
 
