@@ -42,6 +42,12 @@ module Acquire
       build_board_matrix
     end
 
+    def reset!
+      @cells = []
+      @neighboring_indexes = {}
+      build_board_matrix
+    end
+
     def occupy_cell_at(index)
       @cells[index].occupy!
     end
