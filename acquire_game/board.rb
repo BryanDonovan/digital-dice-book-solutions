@@ -39,6 +39,7 @@ module Acquire
       @cell_indexes = []
       @length = args[:length]
       @width = args[:width]
+      @neighboring_indexes = {}
       build_board_matrix
     end
 
@@ -70,8 +71,7 @@ module Acquire
     end
 
     def cell_index_has_no_neighbors?(index)
-      neighboring_indexes = get_neighboring_indexes(index)
-      neighboring_indexes.each do |n_index|
+      @neighboring_indexes[index].each do |n_index|
         return false if !cell_empty_at?(n_index)
       end
 
@@ -80,24 +80,20 @@ module Acquire
 
     private
 
+    def build_board_matrix
+      cell_index = 0
+      0.upto(@length - 1) do |x_coord|
+        0.upto(@width - 1) do |y_coord|
+          @cells[cell_index] = Acquire::Cell.new(x_coord, y_coord)
+          @cell_indexes.push(cell_index)
+          get_neighboring_indexes(cell_index)
+          @neighboring_indexes[cell_index] = get_neighboring_indexes(cell_index)
+          cell_index += 1
+        end
+      end
+    end
+
     def get_neighboring_indexes(index)
-      @neighboring_indexes ||= {}
-      @neighboring_indexes[index] ||= _get_neighboring_indexes(index)
-    end
-
-    def get_index_at(coords)
-      x_factor = @width * coords[0]
-      y_factor = coords[1]
-      return x_factor + y_factor
-    end
-
-    def coords_within_bounds?(coords)
-      x = coords[0]
-      y = coords[1]
-      return x >= 0 && y >= 0 && x <= @length - 1 && y <= @width - 1
-    end
-
-    def _get_neighboring_indexes(index)
       cell = cell_at(index)
       neighbors = []
       neighbor_distances = [[0, 1], [0, -1], [1, 0], [-1, 0]]
@@ -114,16 +110,16 @@ module Acquire
       return neighbors
     end
 
-    def build_board_matrix
-      cell_index = 0
-      0.upto(@length - 1) do |x_coord|
-        0.upto(@width - 1) do |y_coord|
-          @cells[cell_index] = Acquire::Cell.new(x_coord, y_coord)
-          @cell_indexes.push(cell_index)
-          get_neighboring_indexes(cell_index)
-          cell_index += 1
-        end
-      end
+    def get_index_at(coords)
+      x_factor = @width * coords[0]
+      y_factor = coords[1]
+      return x_factor + y_factor
+    end
+
+    def coords_within_bounds?(coords)
+      x = coords[0]
+      y = coords[1]
+      return x >= 0 && y >= 0 && x <= @length - 1 && y <= @width - 1
     end
   end
 
