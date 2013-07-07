@@ -152,15 +152,17 @@ module Acquire
 end
 
 
-runs = 100
+if __FILE__ == $0
+  runs = 100
 
-total_picks = 0;
+  total_picks = 0;
 
-runs.times do |run|
-  board = Acquire::Board.new
-  cell_picker = Acquire::CellPicker.new(board)
-  cell_picker.pick_until_no_remote_cells_left
-  total_picks += cell_picker.total_picks
+  runs.times do |run|
+    board = Acquire::Board.new
+    cell_picker = Acquire::CellPicker.new(board)
+    cell_picker.pick_until_no_remote_cells_left
+    total_picks += cell_picker.total_picks
+  end
+
+  puts "Average: #{total_picks/runs.to_f}"
 end
-
-puts "Average: #{total_picks/runs.to_f}"
