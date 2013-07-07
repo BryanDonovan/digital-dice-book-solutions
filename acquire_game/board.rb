@@ -19,16 +19,11 @@ module Acquire
     end
 
     def empty?
-      !occupied?
+      !@is_occupied
     end
 
     def occupy!
       @is_occupied = true
-    end
-
-    def next_to?(cell)
-      ((cell.x_coord - @x_coord).abs == 1 && (cell.y_coord - @y_coord).abs == 0) ||
-        (cell.x_coord - @x_coord).abs == 0 && (cell.y_coord - @y_coord).abs == 1
     end
 
     def to_s
@@ -90,14 +85,29 @@ module Acquire
       @neighboring_indexes[index] ||= _get_neighboring_indexes(index)
     end
 
+    def get_index_at(coords)
+      x_factor = @width * coords[0]
+      y_factor = coords[1]
+      return x_factor + y_factor
+    end
+
+    def coords_within_bounds?(coords)
+      x = coords[0]
+      y = coords[1]
+      return x >= 0 && y >= 0 && x <= @length - 1 && y <= @width - 1
+    end
+
     def _get_neighboring_indexes(index)
       cell = cell_at(index)
       neighbors = []
+      neighbor_distances = [[0, 1], [0, -1], [1, 0], [-1, 0]]
 
-      @cell_indexes.each do |cell_index|
-        potential_neighbor = cell_at(cell_index)
-        if cell.next_to?(potential_neighbor)
-          neighbors.push(cell_index)
+      neighbor_distances.each do |n_dists|
+        x = cell.x_coord + n_dists[0]
+        y = cell.y_coord + n_dists[1]
+
+        if coords_within_bounds?([x, y])
+          neighbors.push(get_index_at([x, y]))
         end
       end
 
@@ -110,6 +120,7 @@ module Acquire
         0.upto(@width - 1) do |y_coord|
           @cells[cell_index] = Acquire::Cell.new(x_coord, y_coord)
           @cell_indexes.push(cell_index)
+          get_neighboring_indexes(cell_index)
           cell_index += 1
         end
       end
