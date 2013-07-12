@@ -3,6 +3,7 @@ require './board'
 
 module Acquire
   class Printer
+
     def initialize(board)
       @board = board
     end

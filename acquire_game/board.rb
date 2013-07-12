@@ -52,6 +52,10 @@ module Acquire
       @cells[index].occupy!
     end
 
+    def cell_at(index)
+      @cells[index]
+    end
+
     def cell_empty_at?(index)
       cell_at(index).empty?
     end
@@ -158,7 +162,8 @@ end
 
 
 if __FILE__ == $0
-  runs = 100
+  require('./printer')
+  runs = 1
 
   total_picks = 0;
 
@@ -167,6 +172,7 @@ if __FILE__ == $0
     cell_picker = Acquire::CellPicker.new(board)
     cell_picker.pick_until_no_remote_cells_left
     total_picks += cell_picker.total_picks
+    Acquire::Printer.print(board)
   end
 
   puts "Average: #{total_picks/runs.to_f}"
