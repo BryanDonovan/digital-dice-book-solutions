@@ -7,7 +7,6 @@ describe Elevator do
     @elevator = Elevator.new(floors: @floors)
   end
 
-=begin
   it "can be instantiated" do
     @elevator.must_be_instance_of(Elevator)
   end
@@ -62,7 +61,6 @@ describe Elevator do
       pos.to_f.must_equal(expected.to_f)
     end
   end
-=end
 
   describe "#move_to" do
     before do
@@ -163,18 +161,13 @@ end
 
 describe Building do
   before do
-    @floors = 7
     @waiting_floor = 2
     @elevators = [Elevator.new(floors: @floors), Elevator.new(floors: @floors)]
-    @building = Building.new(floors: @floors, waiting_floor: @waiting_floor, elevators: @elevators)
+    @building = Building.new(waiting_floor: @waiting_floor, elevators: @elevators)
   end
 
   it "can be instantiated" do
     @building.must_be_instance_of(Building)
-  end
-
-  it "has the specified number of floors" do
-    @building.floors.must_equal(@floors)
   end
 
   it "has the specified waiting_floor" do

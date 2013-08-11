@@ -58,10 +58,9 @@ class Elevator
 end
 
 class Building
-  attr_accessor :floors, :waiting_floor, :elevators
+  attr_accessor :waiting_floor, :elevators
 
   def initialize(args)
-    @floors = args[:floors]
     @waiting_floor = args[:waiting_floor]
     @elevators = args[:elevators]
   end
@@ -87,7 +86,7 @@ if __FILE__ == $0
     floors = 7
     waiting_floor = 2
     elevators = [Elevator.new(floors: floors), Elevator.new(floors: floors)]
-    building = Building.new(floors: floors, waiting_floor: waiting_floor, elevators: elevators)
+    building = Building.new(waiting_floor: waiting_floor, elevators: elevators)
 
     @runs.times do
       building.move_elevators_to_random_locations
