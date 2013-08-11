@@ -161,6 +161,7 @@ end
 
 describe Building do
   before do
+    @floors = 7
     @waiting_floor = 2
     @elevators = [Elevator.new(floors: @floors), Elevator.new(floors: @floors)]
     @building = Building.new(waiting_floor: @waiting_floor, elevators: @elevators)
