@@ -1,11 +1,9 @@
-require 'pp'
 dishwashers = [1, 2, 3, 4, 5]
 clumsy_guy = 1
 runs = 1000000
 clumsy_events = 0
 
 runs.times do
-  culprits = []
   broken_count = 0
 
   5.times do
