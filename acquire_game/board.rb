@@ -56,6 +56,14 @@ module Acquire
       @cells[index]
     end
 
+    def cell_at_coords(coords)
+      cell_at(get_index_at(coords))
+    end
+
+    def occupy_cell_at_coords(coords)
+      cell_at_coords(coords).occupy!
+    end
+
     def cell_empty_at?(index)
       cell_at(index).empty?
     end
@@ -70,17 +78,38 @@ module Acquire
 
     def remote_cells_available?
       @cells.each do |cell|
-        return true if cell_has_no_neighbors?(cell)
+        return true if cell.empty? && cell_has_no_neighbors?(cell)
       end
       return false
     end
 
     def cell_has_no_neighbors?(cell)
       index = get_index_at([cell.x_coord, cell.y_coord])
+      if @neighbors[index].length <= 1 && cell.occupied?
+        return false
+      end
+
       @neighbors[index].each do |neighbor|
         return false if neighbor.occupied?
       end
       return true
+    end
+
+    def get_neighbors(cell)
+      neighbors = []
+      neighbor_distances = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+
+      neighbor_distances.each do |n_dists|
+        x = cell.x_coord + n_dists[0]
+        y = cell.y_coord + n_dists[1]
+
+        if coords_within_bounds?([x, y])
+          neighbor_cell = @cells[get_index_at([x, y])]
+          neighbors.push(neighbor_cell)
+        end
+      end
+
+      return neighbors
     end
 
     private
@@ -97,23 +126,6 @@ module Acquire
       @cells.each_with_index do |cell, index|
         @neighbors[index] = get_neighbors(cell)
       end
-    end
-
-    def get_neighbors(cell)
-      neighbors = []
-      neighbor_distances = [[0, 1], [0, -1], [1, 0], [-1, 0]]
-
-      neighbor_distances.each do |n_dists|
-        x = cell.x_coord + n_dists[0]
-        y = cell.y_coord + n_dists[1]
-
-        if coords_within_bounds?([x, y])
-          cell = @cells[get_index_at([x, y])]
-          neighbors.push(cell)
-        end
-      end
-
-      return neighbors
     end
 
     def get_index_at(coords)
@@ -163,7 +175,7 @@ end
 
 if __FILE__ == $0
   require('./printer')
-  runs = 1
+  runs = 100
 
   total_picks = 0;
 
@@ -172,7 +184,7 @@ if __FILE__ == $0
     cell_picker = Acquire::CellPicker.new(board)
     cell_picker.pick_until_no_remote_cells_left
     total_picks += cell_picker.total_picks
-    Acquire::Printer.print(board)
+    #Acquire::Printer.print(board)
   end
 
   puts "Average: #{total_picks/runs.to_f}"
