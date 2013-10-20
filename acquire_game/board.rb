@@ -69,8 +69,7 @@ module Acquire
     end
 
     def full?
-      @cells.each_index do |cell_index|
-        cell = @cells[cell_index]
+      @cells.each do |cell|
         return false if cell.empty?
       end
       return true
