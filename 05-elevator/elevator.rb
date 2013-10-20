@@ -80,27 +80,29 @@ end
 
 if __FILE__ == $0
   @runs = 100000
-  @coming_down = 0
+  @going_right_direction = 0
 
   def run
-    floors = 7
-    waiting_floor = 2
+    floors = 15
+    waiting_floor = 9
     elevators = [Elevator.new(floors: floors), Elevator.new(floors: floors)]
     building = Building.new(waiting_floor: waiting_floor, elevators: elevators)
 
     @runs.times do
       building.move_elevators_to_random_locations
       arriving_elevator = building.arriving_elevator
-      if arriving_elevator.direction == :down
-        @coming_down += 1
+      if arriving_elevator.direction == :up
+        @going_right_direction += 1
       end
     end
   end
 
-  expected = 13.0 / 18.0
+  #expected = 13.0 / 18.0
 
   run()
-  prop_coming_down = (@coming_down * 1.000) / @runs
-  puts "Proportion coming down: #{prop_coming_down}"
-  puts "Expected to be near #{expected}"
+  prop_going_right_direction = (@going_right_direction * 1.000) / @runs
+  puts
+  puts "Proportion going right direction: #{prop_going_right_direction}"
+  puts
+  #puts "Expected to be near #{expected}"
 end

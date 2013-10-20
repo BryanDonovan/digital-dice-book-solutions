@@ -24,4 +24,4 @@ print "clumsy_events: ", clumsy_events
 prob = clumsy_events * 1.0 / runs
 print "prob: ", prob
 
-assert(prob < 0.007 and prob > 0.005)
+assert prob < 0.007 and prob > 0.005
