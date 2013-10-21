@@ -166,6 +166,7 @@ module Acquire
     def pick_until_no_remote_cells_left
       while @board.remote_cells_available?
         pick
+        #Acquire::Printer.print(board)
       end
     end
   end
@@ -174,17 +175,20 @@ end
 
 if __FILE__ == $0
   require('./printer')
-  runs = 100
+  runs = 1000
 
-  total_picks = 0;
+  total_picks = 0
+  max_picks = 0
 
   runs.times do |run|
     board = Acquire::Board.new
     cell_picker = Acquire::CellPicker.new(board)
     cell_picker.pick_until_no_remote_cells_left
     total_picks += cell_picker.total_picks
+    max_picks = cell_picker.total_picks if cell_picker.total_picks > max_picks
     #Acquire::Printer.print(board)
   end
 
   puts "Average: #{total_picks/runs.to_f}"
+  puts "Max: #{max_picks}"
 end
