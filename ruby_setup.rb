@@ -1,5 +1,4 @@
 require 'pp'
-require 'minitest/spec'
 require 'minitest/autorun'
 
 begin
