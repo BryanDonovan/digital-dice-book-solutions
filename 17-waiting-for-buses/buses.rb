@@ -27,7 +27,7 @@ class WaitInterval
   private
 
   def to_minutes(decimal)
-    return decimal * 60
+    decimal * 60
   end
 end
 
@@ -55,7 +55,7 @@ class Trip
       end
     end
 
-    return shortest_wait
+    shortest_wait
   end
 end
 
