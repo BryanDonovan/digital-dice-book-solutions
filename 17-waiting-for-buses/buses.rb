@@ -31,19 +31,11 @@ class WaitInterval
   end
 end
 
-class Traveler
-  attr_accessor :start_time
+class Trip
+  attr_accessor :start_time, :buslines, :wait_time
 
   def initialize(args)
     @start_time = args[:start_time]
-  end
-end
-
-class Trip
-  attr_accessor :traveler, :buslines, :wait_time
-
-  def initialize(args)
-    @traveler = args[:traveler]
     @buslines = args[:buslines]
   end
 
@@ -56,7 +48,7 @@ class Trip
   def get_wait_time
     shortest_wait = 60
     buslines.each do |busline|
-      _wait_time = WaitInterval.new(start_time: @traveler.start_time, arrival_time: busline.arrival_time).wait_time
+      _wait_time = WaitInterval.new(start_time: @start_time, arrival_time: busline.arrival_time).wait_time
 
       if _wait_time < shortest_wait
         shortest_wait = _wait_time
@@ -76,8 +68,7 @@ class Runner
   end
 
   def run
-    traveler = Traveler.new(start_time: Random.rand())
-    trip = Trip.new(traveler: traveler, buslines: @buslines)
+    trip = Trip.new(start_time: Random.rand(), buslines: @buslines)
     trip.start
     @wait_time = trip.wait_time
   end
@@ -101,7 +92,7 @@ class Runner
 end
 
 if __FILE__ == $0
-  busline_qty = 2
+  busline_qty = 3
   n = 10000
   total_time = 0
 
